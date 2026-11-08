@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Export in progress — PIA & DPIA Automation prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+/* OneTrust Vitreus UI — tokens + base components for prototypes.
+   Source: Figma "Vitreus UI Kit" (FEQ3soZ9RIJbylxkhyDHQM), Theme collection.
+   Default = Vitreus mode. Add data-theme="onecore" on <html> for OneCore mode.
+   Inline this whole file in the prototype's <style>. */
+
+:root {
+  color-scheme: light;
+  /* Font: Antique Legacy is OneTrust's licensed font and is not on Google Fonts.
+     Inter is the stand-in (load from fonts.googleapis.com). */
+  --vt-font: "Antique Legacy", "Inter", -apple-system, "Segoe UI", Arial, sans-serif;
+  --vt-w-light: 400; --vt-w-regular: 500; --vt-w-medium: 600;
+
+  /* Text */
+  --vt-text: #1A1A1A;
+  --vt-text-muted: #4D4D4D;
+  --vt-text-placeholder: #767676;
+  --vt-text-disabled: #767676;
+  --vt-text-inverse: #FFFFFF;
+  --vt-link: #1470A9;
+
+  /* Surfaces & lines */
+  --vt-surface: #FFFFFF;
+  --vt-bg: #F8F8F8;
+  --vt-divider: #CCCCCC;
+  --vt-divider-dark: #A9A9A9;
+  --vt-card-border: #DDDDDD;
+  --vt-disabled-fill: #E5E5E5;
+
+  /* Interaction */
+  --vt-hover: #E8F1F6;
+  --vt-selected: #E0F1FF;
+  --vt-focus-ring: #167CBB;
+  --vt-focus-border: #0066FF;
+
+  /* Brand / buttons */
+  --vt-primary: #468254;
+  --vt-primary-hover: #2C6145;
+  --vt-primary-label: #FFFFFF;
+  --vt-secondary-bg: #FFFFFF;
+  --vt-secondary-border: #468254;
+  --vt-secondary-label: #2C6145;
+  --vt-secondary-hover-bg: #EDF5F2;
+  --vt-secondary-hover-label: #2C6145;
+  --vt-default-hover-bg: #E8F1F6;
+  --vt-danger: #B30000;
+  --vt-danger-hover: #B30000;
+  --vt-btn-disabled-bg: #CCCCCC;
+  --vt-btn-disabled-label: #FFFFFF;
+
+  /* Inputs */
+  --vt-input-border: #767676;
+  --vt-input-border-error: #D00037;
+  --vt-input-disabled-bg: #EEEEEE;
+  --vt-required: #EB004C;
+
+  /* Feedback */
+  --vt-success: #028A02;   --vt-success-bg: #EDF3EE;
+  --vt-info: #1470A9;      --vt-info-bg: #E8F1F6;
+  --vt-warning: #DA7C01;   --vt-warning-bg: #FBF2E6;
+  --vt-error: #B30000;     --vt-error-bg: #F9ECEC;
+
+  /* Badges (border colour; label is always --vt-text) */
+  --vt-badge-default: #4D4D4D;  --vt-badge-default-bg: #FFFFFF;
+  --vt-badge-primary: #1470A9;  --vt-badge-primary-bg: #F7FAFB;
+  --vt-badge-success: #4F9D81;  --vt-badge-success-bg: #EDF5F2;
+  --vt-badge-warning: #DA7C01;  --vt-badge-warning-bg: #FBF2E6;
+  --vt-badge-danger: #B30000;   --vt-badge-danger-bg: #F7E6E6;
+  --vt-badge-hold: #2C6145;     --vt-badge-hold-bg: #EAEFEC;
+  --vt-badge-purple: #7E57C2;   --vt-badge-purple-bg: #F2EEF9;
+  --vt-badge-orange: #CD491D;   --vt-badge-orange-bg: #FAEDE8;
+  --vt-badge-pink: #CB347D;     --vt-badge-pink-bg: #FAEBF2;
+
+  /* Risk scale */
+  --vt-risk-very-high: #B30000; --vt-risk-very-high-bg: #F7E6E6;
+  --vt-risk-high: #CD491D;      --vt-risk-high-bg: #FAEDE8;
+  --vt-risk-medium: #DA7C01;    --vt-risk-medium-bg: #FBF2E6;
+  --vt-risk-low: #4F9D81;       --vt-risk-low-bg: #EDF5F2;
+  --vt-risk-very-low: #2C6145;  --vt-risk-very-low-bg: #EAEFEC;
+
+  /* Charts — use in this order */
+  --vt-chart-1: #1976D2; --vt-chart-2: #7E57C2; --vt-chart-3: #546E7A; --vt-chart-4: #2E447D;
+  --vt-chart-5: #01579B; --vt-chart-6: #4A148C; --vt-chart-7: #AB47BC; --vt-chart-8: #CB347D;
+  --vt-chart-green: #55A05E; --vt-chart-orange: #F6A664; --vt-chart-yellow: #FFCF7A; --vt-chart-dark-orange: #EC8053;
+
+  /* Navigation */
+  --vt-sidebar-bg: #2C3643;
+  --vt-sidebar-active-bg: #14191F;
+  --vt-sidebar-accent: #6CC04A;
+  --vt-sidebar-label: #FFFFFF;
+  --vt-tooltip-bg: #292B2E;
+
+  /* AI */
+  --vt-ai: #8858E7;
+  --vt-ai-accent: #5358EF;
+
+  /* Radius */
+  --vt-r-xs: 2px; --vt-r-sm: 3px; --vt-r-md: 4px; --vt-r-lg: 6px; --vt-r-xl: 10px; --vt-r-2xl: 20px; --vt-r-pill: 999px;
+  --vt-r-control: 4px;
+
+  /* Spacing */
+  --vt-s-3xs: 2px; --vt-s-2xs: 4px; --vt-s-xs: 8px; --vt-s-sm: 12px; --vt-s-md: 16px;
+  --vt-s-20: 20px; --vt-s-lg: 24px; --vt-s-xl: 32px; --vt-s-2xl: 40px; --vt-s-3xl: 48px;
+
+  /* Elevation */
+  --vt-e1: 0 1px 3px rgba(0,0,0,.20), 0 2px 2px rgba(0,0,0,.12), 0 0 2px rgba(0,0,0,.14);
+  --vt-e2: 0 1px 5px rgba(0,0,0,.20), 0 3px 4px rgba(0,0,0,.12), 0 2px 3px rgba(0,0,0,.14);
+  --vt-e3: 0 1px 10px rgba(0,0,0,.20), 0 4px 5px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.14);
+  --vt-e4: 0 4px 5px rgba(0,0,0,.20), 0 3px 14px 3px rgba(0,0,0,.12), 0 8px 10px 1px rgba(0,0,0,.14);
+  --vt-e5: 0 8px 10px rgba(0,0,0,.20), 0 6px 30px 5px rgba(0,0,0,.12), 0 16px 24px 2px rgba(0,0,0,.14);
+  --vt-e6: 0 11px 15px rgba(0,0,0,.20), 0 9px 46px rgba(0,0,0,.12), 0 24px 38px rgba(0,0,0,.14);
+}
+
+/* OneCore mode — only values that differ from Vitreus */
+[data-theme="onecore"] {
+  --vt-text: #080916; --vt-text-muted: #5D5D5D; --vt-text-placeholder: #A2A2A2; --vt-text-disabled: #949494;
+  --vt-divider: #CBCDD0; --vt-divider-dark: #CBCDD0; --vt-card-border: #CBCDD0; --vt-disabled-fill: #F2F2F2;
+  --vt-hover: #EDEDED; --vt-selected: #DBFCE8; --vt-focus-ring: #00996A; --vt-focus-border: #00996A;
+  --vt-primary: #303030; --vt-primary-hover: #383838;
+  --vt-secondary-bg: transparent; --vt-secondary-border: #0A0B12; --vt-secondary-label: #080916;
+  --vt-secondary-hover-bg: #383838; --vt-secondary-hover-label: #FFFFFF; --vt-default-hover-bg: #383838;
+  --vt-danger: #D13314; --vt-danger-hover: #BF371D;
+  --vt-btn-disabled-bg: #EDEDED; --vt-btn-disabled-label: #949494;
+  --vt-input-border: #CBCDD0; --vt-input-border-error: #E64D2E; --vt-input-disabled-bg: #F2F2F2; --vt-required: #D13314;
+  --vt-success: #30A36B; --vt-success-bg: #F0FCF5; --vt-warning: #F59E0A; --vt-warning-bg: #FFFAEB;
+  --vt-error: #D13314; --vt-error-bg: #FFF2F2;
+  --vt-badge-default: #5D5D5D; --vt-badge-primary: #3B82F5; --vt-badge-primary-bg: #F0F5FF;
+  --vt-badge-success: #17A34A; --vt-badge-success-bg: #F0FCF5; --vt-badge-warning: #F59E0A; --vt-badge-warning-bg: #FFFAEB;
+  --vt-badge-danger: #DB2626; --vt-badge-danger-bg: #FFF2F2; --vt-badge-hold: #6E7080; --vt-badge-hold-bg: #F7F8FC;
+  --vt-badge-purple: #7C3AED; --vt-badge-purple-bg: #F5F3FF; --vt-badge-orange: #EB590D; --vt-badge-orange-bg: #FFF7ED;
+  --vt-badge-pink: #ED4799; --vt-badge-pink-bg: #FCF2F7;
+  --vt-sidebar-bg: #303030; --vt-sidebar-active-bg: rgba(255,255,255,.06); --vt-sidebar-accent: #17A34A;
+  --vt-tooltip-bg: #080916; --vt-r-control: 3px;
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; font-family: var(--vt-font); font-weight: var(--vt-w-light); font-size: 14px; line-height: 20px;
+  letter-spacing: -0.01em; color: var(--vt-text); background: var(--vt-bg); }
+a { color: var(--vt-link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+:focus-visible { outline: 2px solid var(--vt-focus-ring); outline-offset: 2px; }
+
+/* Type ramp (Figma text styles) */
+.vt-h1 { font-size: 28px; line-height: 40px; font-weight: var(--vt-w-medium); letter-spacing: -0.03em; margin: 0; }
+.vt-h2 { font-size: 24px; line-height: 32px; font-weight: var(--vt-w-medium); letter-spacing: -0.03em; margin: 0; }
+.vt-h3 { font-size: 20px; line-height: 28px; font-weight: var(--vt-w-medium); letter-spacing: -0.02em; margin: 0; }
+.vt-h4 { font-size: 20px; line-height: 28px; font-weight: var(--vt-w-light); letter-spacing: -0.02em; margin: 0; }
+.vt-h5 { font-size: 18px; line-height: 24px; font-weight: var(--vt-w-medium); letter-spacing: -0.02em; margin: 0; }
+.vt-h6 { font-size: 16px; line-height: 24px; font-weight: var(--vt-w-medium); letter-spacing: -0.02em; margin: 0; }
+.vt-body { font-size: 16px; line-height: 24px; }
+.vt-sm { font-size: 14px; line-height: 20px; }
+.vt-caption { font-size: 12px; line-height: 16px; }
+.vt-muted { color: var(--vt-text-muted); }
+.vt-bold { font-weight: var(--vt-w-medium); }
+
+/* ---------- App shell ---------- */
+.vt-shell { display: flex; min-height: 100vh; }
+.vt-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.vt-content { padding: var(--vt-s-lg); display: flex; flex-direction: column; gap: var(--vt-s-md); }
+
+/* Sidebar: 224px, dark, 48px items, 4px green accent on active */
+.vt-sidebar { width: 224px; flex-shrink: 0; background: var(--vt-sidebar-bg); color: var(--vt-sidebar-label); }
+.vt-sidebar__title { padding: 16px; font-size: 14px; font-weight: var(--vt-w-regular); border-bottom: 1px solid rgba(255,255,255,.3); }
+.vt-sidebar__item { display: flex; align-items: center; gap: 8px; height: 48px; padding: 0 16px; color: var(--vt-sidebar-label);
+  font-size: 14px; border-left: 4px solid transparent; cursor: pointer; }
+.vt-sidebar__item:hover { background: var(--vt-sidebar-active-bg); text-decoration: none; }
+.vt-sidebar__item.is-active { background: var(--vt-sidebar-active-bg); border-left-color: var(--vt-sidebar-accent); }
+.vt-sidebar__item--child { padding-left: 36px; }
+
+/* Page header: white, breadcrumb, title + badges, description, actions right */
+.vt-page-header { background: var(--vt-surface); border-bottom: 1px solid var(--vt-divider); padding: 16px 24px;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.vt-breadcrumb { display: flex; gap: 6px; align-items: center; font-size: 12px; line-height: 16px; margin-bottom: 4px; }
+.vt-breadcrumb a { color: var(--vt-link); }
+.vt-page-header__title { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.vt-page-header__actions { display: flex; gap: 8px; align-items: center; }
+
+/* ---------- Buttons: 32px tall, 6/16 padding, 14px medium, radius 4 ---------- */
+.vt-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 32px; padding: 0 16px;
+  border-radius: var(--vt-r-control); border: 1px solid transparent; background: transparent; color: var(--vt-text);
+  font: inherit; font-size: 14px; font-weight: var(--vt-w-medium); white-space: nowrap; cursor: pointer; }
+.vt-btn:hover { background: var(--vt-default-hover-bg); }
+.vt-btn--primary { background: var(--vt-primary); color: var(--vt-primary-label); }
+.vt-btn--primary:hover { background: var(--vt-primary-hover); }
+.vt-btn--secondary { background: var(--vt-secondary-bg); border-color: var(--vt-secondary-border); color: var(--vt-secondary-label); }
+.vt-btn--secondary:hover { background: var(--vt-secondary-hover-bg); color: var(--vt-secondary-hover-label); }
+.vt-btn--tertiary { color: var(--vt-secondary-label); }
+.vt-btn--tertiary:hover { background: var(--vt-secondary-hover-bg); color: var(--vt-secondary-hover-label); }
+.vt-btn--danger { background: var(--vt-danger); color: #fff; }
+.vt-btn--danger:hover { background: var(--vt-danger-hover); }
+.vt-btn:disabled { background: var(--vt-btn-disabled-bg); color: var(--vt-btn-disabled-label); border-color: transparent; cursor: not-allowed; }
+.vt-btn--icon { width: 32px; padding: 0; }
+.vt-btn--ai { border-color: var(--vt-ai); color: var(--vt-ai); height: 34px; }
+
+/* ---------- Form fields: label above, 32px input, 1px #767676, focus 2px blue ---------- */
+.vt-field { display: flex; flex-direction: column; gap: 4px; }
+.vt-label { font-size: 14px; line-height: 20px; }
+.vt-label .req { color: var(--vt-required); }
+.vt-input, .vt-select, .vt-textarea { height: 32px; padding: 0 8px; border: 1px solid var(--vt-input-border); border-radius: var(--vt-r-control);
+  background: var(--vt-surface); color: var(--vt-text); font: inherit; font-size: 14px; }
+.vt-textarea { height: 104px; padding: 8px 12px; resize: vertical; }
+.vt-input::placeholder, .vt-textarea::placeholder { color: var(--vt-text-placeholder); }
+.vt-input:focus, .vt-select:focus, .vt-textarea:focus { outline: none; border: 2px solid var(--vt-focus-border); padding-left: 7px; }
+.vt-input:disabled, .vt-select:disabled { background: var(--vt-input-disabled-bg); color: var(--vt-text-disabled); }
+.vt-field.is-error .vt-input, .vt-field.is-error .vt-select { border-color: var(--vt-input-border-error); }
+.vt-help { font-size: 12px; line-height: 16px; color: var(--vt-text-muted); }
+.vt-field.is-error .vt-help { color: var(--vt-required); }
+.vt-check { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; }
+.vt-check input { width: 16px; height: 16px; accent-color: var(--vt-primary); margin: 0; }
+
+/* ---------- Table: 48px rows, #F8F8F8 header, 14px ---------- */
+.vt-table-wrap { overflow-x: auto; background: var(--vt-surface); }
+.vt-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.vt-table th { background: var(--vt-bg); font-weight: var(--vt-w-medium); text-align: left; height: 48px; padding: 0 16px;
+  border-bottom: 1px solid var(--vt-divider); white-space: nowrap; }
+.vt-table td { height: 48px; padding: 0 16px; border-bottom: 1px solid var(--vt-divider); }
+.vt-table tbody tr:hover { background: var(--vt-hover); }
+.vt-table tr.is-selected { background: var(--vt-selected); }
+
+/* ---------- Badge: 20px (small) / 24px (medium), radius 20, 1px border, 12px light ---------- */
+.vt-badge { display: inline-flex; align-items: center; height: 20px; padding: 2px 8px; border-radius: 20px;
+  border: 1px solid var(--vt-badge-default); background: var(--vt-badge-default-bg); color: var(--vt-text);
+  font-size: 12px; line-height: 16px; white-space: nowrap; }
+.vt-badge--primary { border-color: var(--vt-badge-primary); background: var(--vt-badge-primary-bg); }
+.vt-badge--success { border-color: var(--vt-badge-success); background: var(--vt-badge-success-bg); }
+.vt-badge--warning { border-color: var(--vt-badge-warning); background: var(--vt-badge-warning-bg); }
+.vt-badge--danger  { border-color: var(--vt-badge-danger);  background: var(--vt-badge-danger-bg); }
+.vt-badge--hold    { border-color: var(--vt-badge-hold);    background: var(--vt-badge-hold-bg); }
+.vt-badge--purple  { border-color: var(--vt-badge-purple);  background: var(--vt-badge-purple-bg); }
+.vt-badge--orange  { border-color: var(--vt-badge-orange);  background: var(--vt-badge-orange-bg); }
+.vt-badge--pink    { border-color: var(--vt-badge-pink);    background: var(--vt-badge-pink-bg); }
+.vt-status { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; }
+.vt-status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--vt-badge-default); }
+.vt-status--success::before { background: var(--vt-success); }
+.vt-status--warning::before { background: var(--vt-warning); }
+.vt-status--error::before { background: var(--vt-error); }
+.vt-status--info::before { background: var(--vt-info); }
+
+/* ---------- Card ---------- */
+.vt-card { background: var(--vt-surface); border: 1px solid var(--vt-card-border); border-radius: var(--vt-r-md); }
+.vt-card__header { padding: 16px; border-bottom: 1px solid var(--vt-card-border); font-weight: var(--vt-w-medium); font-size: 16px; }
+.vt-card__body { padding: 16px; }
+.vt-card__footer { padding: 12px 16px; border-top: 1px solid var(--vt-card-border); display: flex; justify-content: flex-end; gap: 8px; }
+
+/* ---------- Tabs: 48px, 16px text, 2px primary underline on selected ---------- */
+.vt-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--vt-divider); background: var(--vt-surface); }
+.vt-tab { padding: 0 16px; height: 48px; display: inline-flex; align-items: center; font-size: 16px; color: var(--vt-text);
+  border: 0; border-bottom: 2px solid transparent; background: none; font-family: inherit; font-weight: var(--vt-w-light); cursor: pointer; }
+.vt-tab:hover { background: var(--vt-hover); }
+.vt-tab.is-active { border-bottom-color: var(--vt-primary); font-weight: var(--vt-w-medium); }
+
+/* ---------- Notification (inline) ---------- */
+.vt-note { display: flex; gap: 12px; padding: 12px 16px; border-radius: var(--vt-r-md); border: 1px solid; font-size: 14px; }
+.vt-note--info    { background: #EEF7FF; border-color: #C2DBE9; }
+.vt-note--success { background: #F9FFFA; border-color: #B2D9B3; }
+.vt-note--warning { background: #FFFCF2; border-color: #F4DAB6; }
+.vt-note--error   { background: #FFF5F4; border-color: #F2D2D2; }
+
+/* ---------- Modal: widths 416 / 598 / 768, padding 32/24/24, radius 4, shadow 3E ---------- */
+.vt-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center; padding: 16px; }
+.vt-modal { background: var(--vt-surface); border-radius: var(--vt-r-md); box-shadow: var(--vt-e3); width: 598px; max-width: 100%;
+  padding: 32px 24px 24px; display: flex; flex-direction: column; gap: 16px; position: relative; }
+.vt-modal--xs { width: 416px; } .vt-modal--lg { width: 768px; }
+.vt-modal__close { position: absolute; top: 16px; right: 16px; }
+.vt-modal__footer { display: flex; justify-content: flex-end; gap: 8px; padding-top: 8px; }
+
+/* ---------- Tooltip ---------- */
+.vt-tooltip { background: var(--vt-tooltip-bg); color: #fff; font-size: 12px; line-height: 16px; padding: 6px 8px; border-radius: var(--vt-r-md); }
+
+:root { color-scheme: light; box-sizing: border-box; padding-top: env(safe-area-inset-top,0px); padding-bottom: env(safe-area-inset-bottom,0px); }
+html { scroll-padding-top: env(safe-area-inset-top,0px); }
+body { margin:0; background: var(--vt-bg); color: var(--vt-text); font-family: Inter, "Antique Legacy", system-ui, -apple-system, "Segoe UI", sans-serif; }
+.topbar { height:56px; background: var(--vt-surface); border-bottom:1px solid var(--vt-divider); display:flex; align-items:center; justify-content:flex-end; gap:8px; padding:0 16px; position:sticky; top:0; z-index:20; }
+.topbar .org { font-size:14px; padding:0 8px; color:var(--vt-text); }
+.avatar { width:32px; height:32px; border-radius:50%; background:#4A148C; color:#fff; font-size:12px; display:inline-flex; align-items:center; justify-content:center; font-weight:500; flex-shrink:0; }
+.avatar.sg { background:#2E447D; } .avatar.ap { background:#546E7A; } .avatar.ks { background:#2E447D; }
+.bell-wrap { position:relative; }
+.bell-badge { position:absolute; top:-2px; right:-4px; min-width:18px; height:18px; padding:0 5px; border-radius:9px; background: var(--vt-error); color:#fff; font-size:11px; display:flex; align-items:center; justify-content:center; font-weight:500; }
+.bell-badge.pulse { animation: pulse 1s ease 2; }
+@keyframes pulse { 50% { transform: scale(1.3); } }
+.logo { color:#fff; font-weight:600; font-size:18px; padding:16px; display:flex; align-items:center; gap:8px; border-bottom:1px solid rgba(255,255,255,.3);}
+.vt-sidebar { background:#000; }
+.vt-sidebar__item { font-size:14px; }
+.group { padding: 12px 16px 4px; font-size:12px; opacity:.7; text-transform:uppercase; letter-spacing:.04em;}
+.icon { width:20px; height:20px; display:block; }
+.filters { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+.chip { display:inline-flex; align-items:center; gap:8px; background:#E8EDF1; border-radius:4px; padding:4px 10px; font-size:14px; }
+.link { color: var(--vt-link); font-size:14px; cursor:pointer; }
+.name-link { color: var(--vt-link); font-weight:500; cursor:pointer; }
+.row-actions { position:relative; }
+.menu { position:absolute; left:0; top:36px; background:var(--vt-surface); box-shadow: var(--vt-e2); border-radius:4px; min-width:240px; z-index:15; padding:4px 0; display:none; }
+.menu.open { display:block; }
+.menu button { display:block; width:100%; text-align:left; background:none; border:0; padding:10px 16px; font:inherit; font-size:14px; color:var(--vt-text); cursor:pointer; }
+.menu button:hover { background: var(--vt-hover); }
+.resp { display:flex; align-items:center; gap:8px; }
+.progress-chip { display:inline-flex; align-items:center; gap:6px; margin-left:10px; height:22px; padding:0 8px; border-radius:20px; background:#EEF7FF; border:1px solid #C2DBE9; font-size:12px; color:var(--vt-text); white-space:nowrap; vertical-align:middle; }
+.spin { width:12px; height:12px; border:2px solid #C2DBE9; border-top-color: var(--vt-info); border-radius:50%; animation: spin .8s linear infinite; flex-shrink:0; display:inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+/* modal */
+.vt-overlay { z-index:40; display:none; }
+.vt-overlay.open { display:flex; }
+.vt-modal { position:relative; padding:32px 24px 24px; }
+.modal-body { display:flex; flex-direction:column; gap:16px; margin-top:16px; font-size:14px; line-height:20px; }
+.checks { display:flex; flex-direction:column; gap:8px; }
+.vt-note .ic { flex-shrink:0; color: var(--vt-info); margin-top:1px; }
+.vt-note strong { font-weight:500; display:block; margin-bottom:2px; }
+/* notifications */
+.notif { position:absolute; right:0; top:44px; width:380px; max-width:calc(100vw - 32px); background:var(--vt-surface); box-shadow: var(--vt-e3); border-radius:4px; display:none; z-index:30; }
+.notif.open { display:block; }
+.notif header { padding:12px 16px; border-bottom:1px solid var(--vt-divider); display:flex; justify-content:space-between; align-items:center; font-weight:500; font-size:16px; }
+.n-item { padding:12px 16px; border-bottom:1px solid var(--vt-divider); display:flex; gap:12px; font-size:14px; line-height:20px; }
+.n-item.unread { background:#F5FAFF; }
+.n-item .meta { font-size:12px; color:var(--vt-text-muted); margin-top:2px; }
+.n-item .ic-wrap { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:#EEF7FF; }
+.n-item .ic-wrap.ok { background:#F9FFFA; color: var(--vt-success); }
+.n-item .actions { margin-top:8px; }
+/* toast */
+.toast { position:fixed; left:50%; bottom:calc(24px + env(safe-area-inset-bottom,0px)); transform:translateX(-50%) translateY(20px); background:var(--vt-surface); border:1px solid #C2DBE9; border-left:4px solid var(--vt-info); box-shadow: var(--vt-e3); border-radius:4px; padding:12px 16px; display:flex; gap:12px; font-size:14px; opacity:0; pointer-events:none; transition:.25s; z-index:50; max-width:520px; width:calc(100% - 32px); }
+.toast.show { opacity:1; transform:translateX(-50%); pointer-events:auto; }
+.toast.ok { border-left-color: var(--vt-success); }
+/* demo panel */
+.demo { position:fixed; right:16px; bottom:calc(16px + env(safe-area-inset-bottom,0px)); background:#1A1A1A; color:#fff; border-radius:6px; padding:10px 12px; font-size:12px; display:flex; flex-direction:column; gap:8px; z-index:45; box-shadow: var(--vt-e3); max-width:240px;}
+.demo button { background:#fff; color:#1A1A1A; border:0; border-radius:4px; padding:6px 10px; font:inherit; font-size:12px; cursor:pointer; font-weight:500; }
+.demo button:disabled { opacity:.4; cursor:not-allowed; }
+.cards { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:16px; }
+.kpi { padding:16px; }
+.kpi .v { font-size:24px; font-weight:500; margin-top:4px; }
+@media (max-width:760px){ .vt-sidebar{display:none;} .hide-sm{display:none;} }
+</style>
+</head>
+<body>
+<div class="vt-shell">
+  <nav class="vt-sidebar">
+    <div class="logo">OneTrust</div>
+    <div class="vt-sidebar__title">PIA &amp; DPIA Automation</div>
+    <div class="group">Assessments</div>
+    <a class="vt-sidebar__item vt-sidebar__item--child is-active">Active</a>
+    <a class="vt-sidebar__item vt-sidebar__item--child">Archive</a>
+    <a class="vt-sidebar__item vt-sidebar__item--child">Recycle bin</a>
+    <a class="vt-sidebar__item">Projects</a>
+    <a class="vt-sidebar__item">Risk register</a>
+    <a class="vt-sidebar__item">Reports</a>
+    <div class="group">Setup</div>
+    <a class="vt-sidebar__item vt-sidebar__item--child">Assessment templates</a>
+    <a class="vt-sidebar__item vt-sidebar__item--child">Workflow and routing</a>
+    <a class="vt-sidebar__item vt-sidebar__item--child">Automation rules</a>
+  </nav>
+  <div class="vt-main">
+    <div class="topbar">
+      <button class="vt-btn vt-btn--icon vt-btn--tertiary" aria-label="Search"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button>
+      <div class="bell-wrap">
+        <button class="vt-btn vt-btn--icon vt-btn--tertiary" id="bellBtn" aria-label="Notifications"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 16V11a6 6 0 1 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></button>
+        <span class="bell-badge" id="bellBadge">31</span>
+        <div class="notif" id="notif">
+          <header>Notifications <span class="link" id="markRead">Mark all as read</span></header>
+          <div id="notifList"></div>
+        </div>
+      </div>
+      <span class="org hide-sm">Assessments premium</span>
+      <span class="avatar">SS</span>
+    </div>
+    <header class="vt-page-header">
+      <div>
+        <div class="vt-breadcrumb"><a>PIA &amp; DPIA Automation</a> › <span>Assessments</span></div>
+        <div class="vt-page-header__title"><h1 class="vt-h2">Active assessments</h1></div>
+      </div>
+    </header>
+    <div class="vt-content">
+      <div class="cards">
+        <div class="vt-card kpi"><div class="vt-sm vt-muted">Open assessment risks</div><div class="v">1 <span class="vt-badge vt-badge--danger">Very high</span></div></div>
+        <div class="vt-card kpi"><div class="vt-sm vt-muted">Past deadline</div><div class="v">5</div></div>
+        <div class="vt-card kpi"><div class="vt-sm vt-muted">Deadline in next 30 days</div><div class="v">0</div></div>
+      </div>
+      <div class="filters">
+        <span class="link">＋ Add filter</span>
+        <span class="chip">= Completed ✕</span>
+        <span class="link">Clear all</span>
+      </div>
+      <div class="vt-table-wrap vt-card">
+        <table class="vt-table">
+          <thead><tr><th style="width:40px"><input type="checkbox" aria-label="Select all"></th><th style="width:40px"></th><th>ID</th><th>Name</th><th>Stage</th><th>Result</th><th>Residual risk</th><th>Respondent</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Export modal -->
+<div class="vt-overlay" id="overlay">
+  <div class="vt-modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <button class="vt-btn vt-btn--icon vt-btn--tertiary vt-modal__close" id="mClose" aria-label="Close">✕</button>
+    <h2 class="vt-h5" id="mTitle">Export</h2>
+    <div class="modal-body">
+      <div>By default, the file name will be identical to the report name. Select one or more of the following naming conventions to append to the file name. Note that file name is restricted to a maximum of 255 characters.</div>
+      <div class="checks">
+        <label class="vt-check"><input type="checkbox" checked> Assessment Name</label>
+        <label class="vt-check"><input type="checkbox"> Assessment ID</label>
+      </div>
+      <div class="vt-note vt-note--info" role="note">
+        <svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 11v6M12 7.5v.5"/></svg>
+        <div><strong>Your export can take 60–90 minutes</strong>We’ll prepare the PDF in the background. When it’s ready, you’ll get a notification (bell icon, top right) with the download link. You can keep working in the meantime.</div>
+      </div>
+    </div>
+    <div class="vt-modal__footer" style="margin-top:24px">
+      <button class="vt-btn vt-btn--tertiary" id="mCancel">Cancel</button>
+      <button class="vt-btn vt-btn--primary" id="mExport">Export</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="demo">
+  <div><b>Prototype control</b><br>Exports really take 60–90 min. Skip ahead:</div>
+  <button id="simulate" disabled>Finish next export now</button>
+</div>
+
+<script>
+const data = [
+  {id:286,name:"asset html",result:"Approved",risk:"",resp:["SG","Santhoshini G","sg"]},
+  {id:468,name:"reopen scenario",result:"Approved",risk:"",resp:["SG","Santhoshini G","sg"]},
+  {id:629,name:"AA-62778AA-62778",result:"Approved",risk:"",resp:["SG","Santhoshini G","sg"]},
+  {id:469,name:"reopen scenario-copy",result:"Approved",risk:"",resp:["SG","Santhoshini G","sg"]},
+  {id:279,name:"test",result:"Auto-Approved",risk:"",resp:["SG","Santhoshini G","sg"]},
+  {id:241,name:"Test ABAC reporting 030826-1",result:"Approved",risk:"High",resp:["AP","AA permission","ap"]},
+  {id:4,name:"Test Activity 1",result:"Approved",risk:"",resp:["CU","Test user","sg"]},
+  {id:107,name:"Test assessment notes 2",result:"Approved",risk:"",resp:["KS","Krishna SG","ks"]}
+];
+const inProgress = new Map(); // id -> started time
+let queue = [];
+let unread = 31;
+const notifs = [
+  {kind:"other", title:"Assessment “Test Activity 1” was approved", meta:"Yesterday"}
+];
+let currentId = null;
+const $ = s => document.querySelector(s);
+
+function fmtTime(d){ return d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}); }
+function etaText(d){ const a=new Date(d.getTime()+60*60000), b=new Date(d.getTime()+90*60000); return `Ready around ${fmtTime(a)}–${fmtTime(b)}`; }
+
+function renderRows(){
+  $('#rows').innerHTML = data.map(r => `
+    <tr>
+      <td><input type="checkbox" aria-label="Select ${r.name}"></td>
+      <td class="row-actions">
+        <button class="vt-btn vt-btn--icon vt-btn--tertiary" data-menu="${r.id}" aria-label="Actions">⋯</button>
+        <div class="menu" id="menu-${r.id}">
+          <button>Share</button><button>View activity</button>
+          <button data-export="${r.id}">Export as PDF</button>
+          <button>Manage related assessments</button><button>Edit details</button><button>Archive</button><button>Delete</button><button>Reassess</button><button>Copy</button>
+        </div>
+      </td>
+      <td>${r.id}</td>
+      <td><span class="name-link">${r.name}</span>${inProgress.has(r.id) ? `<span class="progress-chip" title="${etaText(inProgress.get(r.id))}"><span class="spin"></span>Export in progress</span>` : ''}</td>
+      <td><span class="vt-badge vt-badge--success">Completed</span></td>
+      <td>${r.result}</td>
+      <td>${r.risk ? '<span class="vt-badge vt-badge--danger">3 - High</span>' : '- - - - -'}</td>
+      <td><div class="resp"><span class="avatar ${r.resp[2]}">${r.resp[0]}</span>${r.resp[1]}</div></td>
+    </tr>`).join('');
+}
+
+function renderNotifs(){
+  const prog = [...inProgress.entries()].map(([id,t]) => {
+    const r = data.find(x=>x.id===id);
+    return `<div class="n-item unread"><div class="ic-wrap"><span class="spin"></span></div><div><div><b>Export in progress</b> — ${r.name}.pdf</div><div class="meta">Started ${fmtTime(t)} · ${etaText(t)}</div></div></div>`;
+  });
+  const rest = notifs.map(n => n.kind==="ready"
+    ? `<div class="n-item ${n.read?'':'unread'}"><div class="ic-wrap ok">✓</div><div><div><b>Your export is ready</b> — ${n.file}</div><div class="meta">${n.meta}</div><div class="actions"><button class="vt-btn vt-btn--secondary" onclick="fakeDownload('${n.file}')">Download PDF</button></div></div></div>`
+    : `<div class="n-item"><div class="ic-wrap">ⓘ</div><div><div>${n.title}</div><div class="meta">${n.meta}</div></div></div>`);
+  $('#notifList').innerHTML = prog.join('') + rest.join('');
+  $('#bellBadge').textContent = unread;
+  $('#bellBadge').style.display = unread ? 'flex' : 'none';
+  $('#simulate').disabled = queue.length === 0;
+}
+
+function toast(html, ok){
+  const t = $('#toast'); t.className = 'toast show' + (ok?' ok':''); t.innerHTML = html;
+  clearTimeout(t._h); t._h = setTimeout(()=> t.className='toast'+(ok?' ok':''), 6000);
+}
+window.fakeDownload = f => toast(`<span>Downloading <b>${f}</b>…</span>`, true);
+
+document.addEventListener('click', e => {
+  const m = e.target.closest('[data-menu]');
+  document.querySelectorAll('.menu.open').forEach(x => { if(!m || x.id!=='menu-'+m.dataset.menu) x.classList.remove('open'); });
+  if (m) { $('#menu-'+m.dataset.menu).classList.toggle('open'); return; }
+  const ex = e.target.closest('[data-export]');
+  if (ex) { currentId = +ex.dataset.export; ex.parentElement.classList.remove('open'); $('#overlay').classList.add('open'); return; }
+  if (!e.target.closest('.bell-wrap')) $('#notif').classList.remove('open');
+});
+const closeModal = () => $('#overlay').classList.remove('open');
+$('#mClose').onclick = closeModal; $('#mCancel').onclick = closeModal;
+$('#overlay').addEventListener('click', e => { if (e.target.id==='overlay') closeModal(); });
+$('#mExport').onclick = () => {
+  const r = data.find(x=>x.id===currentId);
+  const now = new Date();
+  inProgress.set(currentId, now); queue.push(currentId);
+  closeModal(); renderRows(); renderNotifs();
+  toast(`<span class="spin" style="margin-top:4px"></span><div><b>Export in progress</b><br>We’ll notify you when “${r.name}” is ready to download (about 60–90 minutes).</div>`);
+};
+$('#bellBtn').onclick = e => { e.stopPropagation(); $('#notif').classList.toggle('open'); };
+$('#markRead').onclick = () => { unread = 0; notifs.forEach(n=>n.read=true); renderNotifs(); };
+$('#simulate').onclick = () => {
+  const id = queue.shift(); if (id==null) return;
+  const r = data.find(x=>x.id===id);
+  inProgress.delete(id);
+  notifs.unshift({kind:"ready", file: r.name + ".pdf", meta: "Just now"});
+  unread++; renderRows(); renderNotifs();
+  const b = $('#bellBadge'); b.classList.remove('pulse'); void b.offsetWidth; b.classList.add('pulse');
+  toast(`<div><b>Your export is ready</b><br>“${r.name}.pdf” is in Notifications. <span class="link" onclick="document.getElementById('notif').classList.add('open')">Open</span></div>`, true);
+};
+document.addEventListener('keydown', e => { if (e.key==='Escape') { closeModal(); $('#notif').classList.remove('open'); } });
+renderRows(); renderNotifs();
+</script>
+</body>
+</html>
